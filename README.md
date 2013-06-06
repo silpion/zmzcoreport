@@ -49,6 +49,19 @@ Examples
         zmzcoreport /var/lib/vz/private/opt/zimbra/log
 
 
+
+Known Bugs
+----------
+
+* Sometimes the last line of a log files causes a warning like
+
+        Use of uninitialized value in split at zmzcoreport line 77, <$fh> line 272246.
+
+  Which is the reconversion of the date.  Might be caused by gunzip not
+  behaving or a missing line break.
+
+
+
 License
 -------
 
