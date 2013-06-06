@@ -45,11 +45,14 @@ use Data::Dumper;
 my $logdir = $ARGV[0] || '/opt/zimbra/log';
 die "Log directory '$logdir' not found" unless -d $logdir;
 
+my $debug = 0;
+$| = $debug;
+
 my $data = {};
 
-$| = 0;
 foreach my $logfile ("$logdir/mailbox.log", reverse sort glob "$logdir/mailbox.log.*.gz") {
-  print "+" if $|;
+  print "$logfile\n" if $debug & 1;
+  print "+" if $debug & 2;
 
   my $fh;
   if ($logfile =~ /\.gz$/) {
@@ -75,10 +78,10 @@ foreach my $logfile ("$logdir/mailbox.log", reverse sort glob "$logdir/mailbox.l
     my $user = $attrs{aname} || $attrs{name} || '[unauthenticated]';
 
     $data->{$user}->{$version} = $date unless ($data->{$user}->{$version} || 0) > $date;
-    print "." if $|;
+    print "." if $debug & 2;
   }
 }
-print "\n" if $|;
+print "\n" if $debug & 2;
 
 foreach my $user (sort keys %{$data}) {
   foreach my $version (sort keys %{$data->{$user}}) {
