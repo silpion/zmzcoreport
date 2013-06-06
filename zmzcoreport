@@ -42,7 +42,7 @@ use strict;
 use warnings;
 use Data::Dumper;
 
-my $logdir = $ARGV[1] || '/opt/zimbra/log';
+my $logdir = $ARGV[0] || '/opt/zimbra/log';
 die "Log directory '$logdir' not found" unless -d $logdir;
 
 my $data = {};
