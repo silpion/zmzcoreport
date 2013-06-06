@@ -28,6 +28,10 @@ Examples
 
         zmzcoreport | fgrep -v '[unauthenticated]'
 
+* Suppress the IP address due to privacy concerns:
+
+        zmzcoreport | cut -d' ' -f1-3,5
+
 * Sort by version, oldest first:
 
         zmzcoreport | sort -k 2 -V 
