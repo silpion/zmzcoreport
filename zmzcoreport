@@ -1,0 +1,87 @@
+#!/usr/bin/perl
+# Report the versions of the Zimbra Connector for Outlook currently in use
+# based on the Zimbra mailbox.log file(s).
+#
+# This script will report a space separated list of login name, version
+# and the most recent date this version was used.  All users should also
+# be reported as "[unauthorized]" due to the fact that the username won't
+# be available until after the user was logged in (use fgrep if you want
+# to skip these lines).
+#
+# It accepts an optional first parameter to specify the location of the
+# log file(s).
+#
+# Please be patient when running this script.
+#
+#
+# Copyright (c) 2013, Silpion IT-Solutions GmbH <http://www.silpion.de>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met: 
+#
+# 1. Redistributions of source code must retain the above copyright notice, this
+#    list of conditions and the following disclaimer. 
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution. 
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+use 5.010;
+use strict;
+use warnings;
+use Data::Dumper;
+
+my $logdir = $ARGV[1] || '/opt/zimbra/log';
+die "Log directory '$logdir' not found" unless -d $logdir;
+
+my $data = {};
+
+$| = 0;
+foreach my $logfile ("$logdir/mailbox.log", reverse sort glob "$logdir/mailbox.log.*.gz") {
+  print "+" if $|;
+
+  my $fh;
+  if ($logfile =~ /\.gz$/) {
+    open($fh, "-|", "gunzip -c $logfile") or die "Could not gunzip '$logfile': $!";
+  }
+  else {
+    open($fh, "<", $logfile) or die "Could not open '$logfile': $!";
+  }
+  foreach my $line (<$fh>) {
+    chomp($line);
+    my @line = split(/ +\[?/, $line, 4);
+    push(@line, split(/\] +\[/, pop(@line), 2));
+    push(@line, split(/\]? +(?:- +)?/, pop(@line), 3));
+
+    my $date = join('', split(/-/, $line[0]));
+    next unless $date =~ /^20[0-9]{6}$/;
+
+    my %attrs = split(/[;=]/, $line[4]);
+
+    my($ua, $version) = split(qr(/), ($attrs{ua} || 'undef/undef'), 2);
+    next unless $ua eq 'ZimbraConnectorForOutlook';
+
+    my $user = $attrs{aname} || $attrs{name} || '[unauthenticated]';
+
+    $data->{$user}->{$version} = $date unless ($data->{$user}->{$version} || 0) > $date;
+    print "." if $|;
+  }
+}
+print "\n" if $|;
+
+foreach my $user (sort keys %{$data}) {
+  foreach my $version (sort keys %{$data->{$user}}) {
+    print join(" ", $user, $version, $data->{$user}->{$version}) . "\n";
+  }
+}
