@@ -63,6 +63,8 @@ foreach my $logfile ("$logdir/mailbox.log", reverse sort glob "$logdir/mailbox.l
   }
   foreach my $line (<$fh>) {
     chomp($line);
+    next unless $line;
+
     my @line = split(/ +\[?/, $line, 4);
     push(@line, split(/\] +\[/, pop(@line), 2));
     push(@line, split(/\]? +(?:- +)?/, pop(@line), 3));
