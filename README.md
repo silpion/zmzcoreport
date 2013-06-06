@@ -50,6 +50,41 @@ Examples
 
 
 
+Example Output
+--------------
+
+    $ zmzcoreport | fgrep -v '[unauthenticated]' | my-magic-obfuscator
+    user01@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58124
+    user02@example.com 7.2.1.547 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58121
+    user03@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:34838
+    user04@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:43882
+    user05@example.com 7.2.2.579 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:37106
+    user06@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:46638
+    user07@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:33026
+    user08@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58219
+    user09@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58135
+    user10@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:34010
+    user11@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:57899
+    user12@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58210
+    user13@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58212
+    user14@example.com 7.2.2.579 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:10907
+    user15@example.com 7.2.2.579 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58200
+    user15@example.com 7.2.3.677 20130605 192.0.2.102 /opt/zimbra/log/mailbox.log.2013-06-05.gz:62368
+    user16@example.com 7.2.2.579 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:55610
+    user17@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58141
+    user18@example.com 7.2.2.579 20130605 192.0.2.102 /opt/zimbra/log/mailbox.log.2013-06-05.gz:7850
+    user18@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:33006
+    user19@example.com 7.2.1.547 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:9286
+    user20@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58202
+    user21@example.com 7.2.2.579 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58132
+    user22@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:35669
+    user23@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:36318
+    user24@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:48393
+    user25@example.com 7.2.2.579 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58193
+    user26@example.com 7.2.3.677 20130606 192.0.2.102 /opt/zimbra/log/mailbox.log:58199
+
+
+
 Known Bugs
 ----------
 
