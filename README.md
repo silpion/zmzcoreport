@@ -38,6 +38,14 @@ Examples
 
         zmzcoreport | sort -k 2,2V -k 3,3nr -k 1,1
 
+* You probably don't want to do this:
+
+        curl https://raw.github.com/silpion/zmzcoreport/master/zmzcoreport | perl
+
+* You probably don't want to to do this either:
+
+        zmzcoreport /var/lib/vz/private/opt/zimbra/log
+
 
 License
 -------
