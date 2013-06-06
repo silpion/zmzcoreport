@@ -3,10 +3,12 @@
 # based on the Zimbra mailbox.log file(s).
 #
 # This script will report a space separated list of login name, version
-# and the most recent date this version was used.  All users should also
-# be reported as "[unauthorized]" due to the fact that the username won't
-# be available until after the user was logged in (use fgrep if you want
-# to skip these lines).
+# and the most recent date this version was used and where this entry can
+# be found in the log file.
+#
+# All versions should also be reported as "[unauthorized]" due to the fact
+# that the username won't be available until after the user was logged in
+# (use fgrep if you want to skip these lines).
 #
 # It accepts an optional first parameter to specify the location of the
 # log file(s).
@@ -61,7 +63,10 @@ foreach my $logfile ("$logdir/mailbox.log", reverse sort glob "$logdir/mailbox.l
   else {
     open($fh, "<", $logfile) or die "Could not open '$logfile': $!";
   }
+
+  my $lineno = 0;
   foreach my $line (<$fh>) {
+    $lineno++;
     chomp($line);
     next unless $line;
 
@@ -79,7 +84,15 @@ foreach my $logfile ("$logdir/mailbox.log", reverse sort glob "$logdir/mailbox.l
 
     my $user = $attrs{aname} || $attrs{name} || '[unauthenticated]';
 
-    $data->{$user}->{$version} = $date unless ($data->{$user}->{$version} || 0) > $date;
+    $data->{$user}->{$version} ||= { date => 0 };
+    if ($data->{$user}->{$version}->{date} <= $date) {
+      $data->{$user}->{$version} = {
+        date => $date,
+        file => $logfile,
+        line => $lineno,
+      };
+    }
+
     print "." if $debug & 2;
   }
 }
@@ -87,6 +100,11 @@ print "\n" if $debug & 2;
 
 foreach my $user (sort keys %{$data}) {
   foreach my $version (sort keys %{$data->{$user}}) {
-    print join(" ", $user, $version, $data->{$user}->{$version}) . "\n";
+    print(join(" ",
+        $user,
+        $version,
+        $data->{$user}->{$version}->{date},
+        $data->{$user}->{$version}->{file} . ":" . $data->{$user}->{$version}->{line},
+      ) . "\n");
   }
 }

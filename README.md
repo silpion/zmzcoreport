@@ -8,10 +8,12 @@ Report the versions of the Zimbra Connector for Outlook currently in use
 based on the Zimbra mailbox.log file(s).
 
 This script will report a space separated list of login name, version
-and the most recent date this version was used.  All users should also
-be reported as "[unauthorized]" due to the fact that the username won't
-be available until after the user was logged in (use fgrep if you want
-to skip these lines).
+and the most recent date this version was used and where this entry can
+be found in the log file.
+
+All versions should also be reported as "[unauthorized]" due to the fact
+that the username won't be available until after the user was logged in
+(use fgrep if you want to skip these lines).
 
 It accepts an optional first parameter to specify the location of the
 log file(s).
