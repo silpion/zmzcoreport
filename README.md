@@ -8,7 +8,7 @@ Report the versions of the Zimbra Connector for Outlook currently in use
 based on the Zimbra mailbox.log file(s).
 
 This script will report a space separated list of login date, name and
-address, the ZCO versioni, and the most recent date this version wasi
+address, the ZCO version, and the most recent date this version was
 used and where this entry can be found in the log file.
 
 All versions should also be reported as "[unauthorized]" due to the fact
